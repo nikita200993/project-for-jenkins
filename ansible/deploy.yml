@@ -56,7 +56,7 @@
 
     - name: Copy project jar
       copy:
-        src: "./app-jenkins-practice-{{ app_version }}.jar"
+        src: "../target/app-jenkins-practice-{{ app_version }}.jar"
         dest: ~/nikitaaero/jenkins-practice/app.jar
 
     - name: Copy run script
