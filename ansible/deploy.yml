@@ -15,6 +15,13 @@
     - name: Gathering facts
       setup:
 
+    - name: Debug
+      debug:
+        msg:
+          - "ssh_user {{ ansible_ssh_user }}"
+          - "ansible user {{ ansible_user }}"
+          - "user {{ user }}"
+
     - name: jdk11 centos
       yum:
         name: java-11-openjdk-devel
