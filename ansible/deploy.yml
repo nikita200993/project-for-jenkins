@@ -11,6 +11,22 @@
     app_version: 1.0.0-SNAPSHOT
 
   tasks:
+    - name: jdk11 centos
+      yum:
+        name: java-11-openjdk-devel
+        state: latest
+      when:
+        ansible_distribution == "CentOS"
+      become: yes
+
+    - name: jdk11 debian
+      apt:
+        name: openjdk-11-jdk
+        state: latest
+      when:
+        ansible_distribution == "Debian"
+      become: yes
+
     - name: Delete jar
       file:
         state: absent
