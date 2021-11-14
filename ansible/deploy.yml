@@ -12,15 +12,15 @@
     app_version: 1.0.0-SNAPSHOT
 
   tasks:
-    - name: Gathering facts
-      setup:
-
     - name: Debug
       debug:
         msg:
           - "ssh_user {{ ansible_ssh_user }}"
           - "ansible user {{ ansible_user }}"
           - "user {{ user }}"
+
+    - name: Gathering facts
+      setup:
 
     - name: jdk11 centos
       yum:
