@@ -20,12 +20,17 @@
       copy:
         src: ../target/app-jenkins-practice-"{{ app_version }}".jar
         dest: ~/nikitaaero/jenkins-practice/app.jar
+
     - name: Copy run script
       copy:
         src: run.sh
         dest: ~/nikitaaero/jenkins-practice/
+
     - name: Executable mod for run script
       file:
         dest: ~/nikitaaero/jenkins-practice/run.sh
         mode: +x
+
+    - name: Run app
+      sh: ./run.sh
 
