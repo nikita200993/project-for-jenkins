@@ -8,119 +8,24 @@
 
   vars:
     ansible_become_pass: "{{ ansible_ssh_password }}"
+    app_version: 1.0.0-SNAPSHOT
 
   tasks:
-    - block: #Debian
-      - name: Install go debian
-        become: true
-        apt:
-          name: golang
-          state: latest
-
-      - name: Add nginx signing key
-        become: true
-        shell: curl -sL https://nginx.org/keys/nginx_signing.key | apt-key add -
-
-      - name: Add nginx repo
-        become: true
-        copy: src=./repositories/unit.list dest=/etc/apt/sources.list.d/unit.list
-
-      - name: Update packages info
-        become: true
-        apt:
-          update_cache: true
-
-      - name: Install nginx unit debian
-        become: true
-        package: name="{{ item }}" state=present
-        notify: Restart Unit
-        with_items:
-          - unit
-          - "{{ dev_unit_package_name }}"
-          - unit-go
-
-      when: ansible_os_family == "Debian"
-
-    - block: #CentOs
-      - name: Install go centos
-        become: true
-        yum:
-          name: golang
-          state: latest
-
-      - name: Add nginx repo centos
-        become: true
-        copy: src=./repositories/unit.repo dest=/etc/yum.repos.d/unit.repo
-
-      when: ansible_os_family == "RedHat"
-
-    - name: Install nginx unit debian
-      become: true
-      package: name="{{ item }}" state=present
-      notify: Restart Unit
-      with_items:
-        - unit
-        - "{{ dev_unit_package_name }}"
-        - unit-go
-
-    - name: Start unit if not started
-      become: true
-      service:
-        name: unit
-        state: started
-
     - name: Clear project dir
       file:
         state: absent
-        path: ~/nikitaaero/app
-      tags:
-        - build
+        path: ~/nikitaaero/jenkins-practice
 
-    - name: Copy project
+    - name: Copy project jar
       copy:
-        src: ./app/
-        dest: ~/nikitaaero/app
-      tags:
-        - build
-
-    - name: Remove go.mod
+        src: ../target/app-jenkins-practice-"{{ app_version }}".jar
+        dest: ~/nikitaaero/jenkins-practice/app.jar
+    - name: Copy run script
+      copy:
+        src: run.sh
+        dest: ~/nikitaaero/jenkins-practice/
+    - name: Executable mod for run script
       file:
-        state: absent
-        path: ~/nikitaaero/app/go.mod
-      tags:
-        - build
+        dest: ~/nikitaaero/jenkins-practice/run.sh
+        mode: +x
 
-    - name: Init module
-      shell: cd ~/nikitaaero/app && go mod init nikitaaero.com/app-unit && go mod tidy
-      tags:
-        - build
-
-    - name: Compile
-      shell: cd ~/nikitaaero/app && go build -o bin/app app.go
-      tags:
-        - build
-
-    - name: Ensures app/conf dir exists
-      file:
-        path: ~/nikitaaero/app/config
-        state: directory
-      tags:
-        - deploy
-
-    - name: Prepare request body
-      template:
-        src: ./unit_config/config.json.j2
-        dest: ~/nikitaaero/app/config/config.json
-      tags:
-        - deploy
-
-    - name: Configures unit for app
-      become: yes
-      shell: curl -X PUT --data-binary @"{{ ansible_env.HOME }}"/nikitaaero/app/config/config.json --unix-socket "{{ unit_socket_path }}" http://localhost/config/
-      tags:
-        - deploy
-
-  handlers:
-    - name: Restart Unit
-      become: true
-      service: name=unit state=restarted

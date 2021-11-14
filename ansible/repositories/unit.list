@@ -1,2 +1,0 @@
-deb https://packages.nginx.org/unit/debian/ bullseye unit
-deb-src https://packages.nginx.org/unit/debian/ bullseye unit

@@ -7,9 +7,9 @@ jar_file="$script_dir"/app.jar
 if [ -f "$pid_file" ]; then
   childPid=$(cat "$pid_file")
   if ps -p "$childPid" >/dev/null; then
-      pkill "$childPid"
+      kill "$childPid"
   fi
 fi
 
-java -jar "$jar_file" 9999
+java -jar "$jar_file" 9999 &
 echo "$!" > "$pid_file"
