@@ -9,9 +9,36 @@ pipeline {
         }
         stage ("build") {
             steps {
-                withMaven {
-                    sh 'mvn clean package'
+                sh 'mvn clean package'
+            }
+        }
+        stage('SonarQube') {
+            steps {
+                def scannerHome = tool 'MySonar';
+                withSonarQubeEnv('MySonar') {
+                    sh "${scannerHome}/bin/sonar-scanner -X \
+                    -Dsonar.projectKey=nikitaaero:freestyle \
+                    -Dsonar.sources=src/main \
+                    -Dsonar.java.binaries=target/classes
+                    "
                 }
+            }
+        }
+        stage('AllureReport') {
+            steps {
+                allure([
+                        includeProperties: false,
+                        jdk: '',
+                        properties: [],
+                        reportBuildPolicy: 'ALWAYS',
+                        results: [[path: 'target/allure-results']]
+                ])
+            }
+
+        }
+        stage('Ansible') {
+            steps {
+                sh "ansible localhost -m ping"
             }
         }
     }
