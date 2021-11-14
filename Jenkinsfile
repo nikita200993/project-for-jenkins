@@ -29,8 +29,8 @@ node {
           sh 'echo $pass'
           sh '#!/bin/bash \
               set -e \
-              cd $WORKSPACE/ansible \
-              ansible-playbook deploy.yml --vault-password-file $pass'
+              cd ${WORKSPACE}/ansible \
+              ansible-playbook deploy.yml --vault-password-file ${pass}'
         }
     }
 }
