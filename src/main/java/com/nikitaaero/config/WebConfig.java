@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean
     public ViewResolver htmlResolver() {
-        var resolver = new InternalResourceViewResolver();
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("/static/");
         resolver.setSuffix(".html");
         return resolver;
