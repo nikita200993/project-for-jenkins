@@ -14,12 +14,14 @@ pipeline {
         }
         stage('SonarQube') {
             steps {
-                def scannerHome = tool 'MySonar';
-                withSonarQubeEnv('MySonar') {
-                    sh "${scannerHome}/bin/sonar-scanner -X \
-                    -Dsonar.projectKey=nikitaaero:freestyle \
-                    -Dsonar.sources=src/main \
-                    -Dsonar.java.binaries=target/classes"
+                step {
+                    def scannerHome = tool 'MySonar';
+                    withSonarQubeEnv('MySonar') {
+                        sh "${scannerHome}/bin/sonar-scanner -X \
+                        -Dsonar.projectKey=nikitaaero:freestyle \
+                        -Dsonar.sources=src/main \
+                        -Dsonar.java.binaries=target/classes"
+                    }
                 }
             }
         }
