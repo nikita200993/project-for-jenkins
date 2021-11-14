@@ -2,6 +2,7 @@
 
 - name: Deploy web app
   hosts: all
+  gather_facts: no
 
   vars_files:
     - vars/credentials.yml
@@ -11,6 +12,10 @@
     app_version: 1.0.0-SNAPSHOT
 
   tasks:
+    - name: Gathering facts
+      setup:
+    -name: debug
+     debuf
     - name: jdk11 centos
       yum:
         name: java-11-openjdk-devel
