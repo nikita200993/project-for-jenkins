@@ -1,9 +1,15 @@
 pipeline {
     agent any
     stages {
-        stage("hello") {
+        stage("git clone") {
             steps {
-                println "Hello world"
+                git branch: 'main',
+                    url: "https://github.com/nikita200993/project-for-jenkins"
+            }
+        }
+        stage ("build") {
+            withMaven {
+                sh 'mvn clean package'
             }
         }
     }
