@@ -3,7 +3,7 @@ node {
         stage("git clone") {
             git branch: 'main',
                 url: "https://github.com/nikita200993/project-for-jenkins"
-            }
+        }
         stage ("build") {
             sh 'mvn clean package'
         }
@@ -14,6 +14,7 @@ node {
                 -Dsonar.projectKey=nikitaaero:freestyle \
                 -Dsonar.sources=src/main \
                 -Dsonar.java.binaries=target/classes"
+           }
         }
         stage('AllureReport') {
             allure([
