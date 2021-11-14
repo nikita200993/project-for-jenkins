@@ -14,8 +14,7 @@
   tasks:
     - name: Gathering facts
       setup:
-    -name: debug
-     debuf
+
     - name: jdk11 centos
       yum:
         name: java-11-openjdk-devel
