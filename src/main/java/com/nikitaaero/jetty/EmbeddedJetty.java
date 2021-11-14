@@ -16,7 +16,7 @@ public class EmbeddedJetty {
 
     private static final int DEFAULT_PORT = 8080;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         new EmbeddedJetty().startJetty(getPortFromArgs(args));
     }
 
@@ -24,19 +24,23 @@ public class EmbeddedJetty {
         if (args.length > 0) {
             try {
                 return Integer.parseInt(args[0]);
-            } catch (NumberFormatException ignore) {
+            } catch (NumberFormatException ex) {
+                throw new RuntimeException("bad port number format", ex);
             }
         }
         return DEFAULT_PORT;
     }
 
-    private void startJetty(int port) throws Exception {
-        Server server = new Server(port);
-        server.setHandler(getServletContextHandler(getContext()));
-        server.start();
-        server.join();
+    private void startJetty(int port) {
+        try {
+            Server server = new Server(port);
+            server.setHandler(getServletContextHandler(getContext()));
+            server.start();
+            server.join();
+        } catch (final Exception ex) {
+            throw new RuntimeException("failed to start server", ex);
+        }
     }
-
 
     private static ServletContextHandler getServletContextHandler(WebApplicationContext context) throws IOException {
         ServletContextHandler contextHandler = new ServletContextHandler();
@@ -52,5 +56,4 @@ public class EmbeddedJetty {
         context.register(WebConfig.class);
         return context;
     }
-
 }
