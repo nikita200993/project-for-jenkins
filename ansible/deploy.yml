@@ -2,7 +2,6 @@
 
 - name: Deploy web app
   hosts: all
-  gather_facts: no
 
   vars_files:
     - vars/credentials.yml
@@ -12,17 +11,6 @@
     app_version: 1.0.0-SNAPSHOT
 
   tasks:
-    - name: Debug
-      debug:
-        msg:
-          - "ssh_user {{ ansible_ssh_user }}"
-          - "ansible user {{ ansible_user }}"
-          - "user {{ user }}"
-          - "ssh user pass {{ ansible_ssh_password }}"
-
-    - name: Gathering facts
-      setup:
-
     - name: jdk11 centos
       yum:
         name: java-11-openjdk-devel
