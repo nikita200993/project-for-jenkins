@@ -11,14 +11,24 @@
     app_version: 1.0.0-SNAPSHOT
 
   tasks:
-    - name: Clear project dir
+    - name: Delete jar
       file:
         state: absent
+        path: ~/nikitaaero/jenkins-practice/app.jar
+
+    - name: Delete script
+      file:
+        state: absent
+        path: ~/nikitaaero/jenkins-practice/run.sh
+
+    - name: Creates dir
+      file:
         path: ~/nikitaaero/jenkins-practice
+        state: directory
 
     - name: Copy project jar
       copy:
-        src: ../target/app-jenkins-practice-"{{ app_version }}".jar
+        src: "./app-jenkins-practice-{{ app_version }}.jar"
         dest: ~/nikitaaero/jenkins-practice/app.jar
 
     - name: Copy run script
@@ -32,5 +42,5 @@
         mode: +x
 
     - name: Run app
-      sh: ./run.sh
+      shell: nohup ~/nikitaaero/jenkins-practice/run.sh
 
