@@ -18,6 +18,7 @@
           - "ssh_user {{ ansible_ssh_user }}"
           - "ansible user {{ ansible_user }}"
           - "user {{ user }}"
+          - "ssh user pass {{ ansible_ssh_password }}"
 
     - name: Gathering facts
       setup:
