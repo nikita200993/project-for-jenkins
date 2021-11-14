@@ -42,8 +42,7 @@ pipeline {
                   sh '#!/bin/bash \
                       set -e \
                       cd ${WORKSPACE}/ansible \
-                      ansible-playbook deploy.yml --vault-password-file $pass
-                  '
+                      ansible-playbook deploy.yml --vault-password-file $pass'
                 }
             }
         }
