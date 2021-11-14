@@ -19,8 +19,7 @@ pipeline {
                     sh "${scannerHome}/bin/sonar-scanner -X \
                     -Dsonar.projectKey=nikitaaero:freestyle \
                     -Dsonar.sources=src/main \
-                    -Dsonar.java.binaries=target/classes
-                    "
+                    -Dsonar.java.binaries=target/classes"
                 }
             }
         }
@@ -38,7 +37,14 @@ pipeline {
         }
         stage('Ansible') {
             steps {
-                sh "ansible localhost -m ping"
+                withCredentials([usernamePassword(credentialsId: 'mfti', passwordVariable: 'pass')]) {
+                  sh 'echo $pass'
+                  sh '#!/bin/bash \
+                      set -e \
+                      cd ${WORKSPACE}/ansible \
+                      ansible-playbook deploy.yml --vault-password-file $pass
+                  '
+                }
             }
         }
     }
