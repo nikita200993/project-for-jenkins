@@ -26,11 +26,7 @@ node {
     }
     stage('Ansible') {
         withCredentials([file(credentialsId: 'vaultpass', variable: 'pass')]) {
-          sh 'echo $pass'
-          sh '#!/bin/bash \
-              set -e \
-              cd ${WORKSPACE}/ansible \
-              ansible-playbook deploy.yml --vault-password-file ${pass}'
+          sh "cd ${WORKSPACE}/ansible && ansible-playbook deploy.yml --vault-password-file $pass"
         }
     }
 }
