@@ -8,8 +8,10 @@ pipeline {
             }
         }
         stage ("build") {
-            withMaven {
-                sh 'mvn clean package'
+            steps {
+                withMaven {
+                    sh 'mvn clean package'
+                }
             }
         }
     }
