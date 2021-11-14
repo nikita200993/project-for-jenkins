@@ -39,7 +39,7 @@ pipeline {
         }
         stage('Ansible') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'mfti', passwordVariable: 'pass')]) {
+                withCredentials([file(credentialsId: 'vaultpass', variable: 'pass')]) {
                   sh 'echo $pass'
                   sh '#!/bin/bash \
                       set -e \
