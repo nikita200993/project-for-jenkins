@@ -1,0 +1,14 @@
+version: "3.3"
+services:
+  helloworld:
+    image: romanyuknr/helloworld
+    ports:
+      - "8080:8080"
+  delegate:
+    image: romanyuknr/delegate
+    ports:
+      - "8090:8080"
+    environment:
+      DELEGATEE_HOST: helloworld:8080
+    depends_on:
+      - helloworld
